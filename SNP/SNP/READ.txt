@@ -1,0 +1,49 @@
+Lets exploit CVE-2009-1026
+First i'll show you the details of this CVE and whats is the vulnerability.
+In here CVE is about kim website SQL injection vulnerabilities in parameters.
+I'll show you a demo site with same vulnerability and exploit it.
+I created a demo site with a login page
+Now we'll test that.
+first of all need to start XAMP server because i created a php based site with using phpmyadmin 
+created table called 'admin' and added some sample data in to that table.
+in here i'm using admin0panel php, config.php, login.php, style.css files only. (because it's a demo i'm only focusing on the vulnerability.)
+In here admin-panel php file shows a form for login.
+and next this table retrieves the values from phpmyadmin database.
+config file is used for connect to data base if you need you can add them seperately or not (depends on the user)
+
+This login.php file checks that username and the passwords as same in the admin table and if it is correct it will shows an alert messege and if not it's shows an error!.
+
+This is the CSS file with styles.
+
+Let's run this with burp browser it is easier to explain.
+
+
+As you can see these are the data that i entered in to tables.
+
+When i entered an invalid username and a password it displays an error 
+
+As you can see when i entered a correct credentials it shows a successful statement.
+
+Lets check the vulnerability
+
+$sqli = "SELECT * FROM admin WHERE admin_name='$username' AND password='$password'";
+
+In a SQL statement an attacker can modify it such as commenting the rest of the statement, or using true false statements
+
+for example
+WHERE admin_name='$username' OR 1=1-- password='$password'
+
+Like wise attacker modify the query.
+
+Now lets check our query
+
+Lets inject it into the user input section
+
+and let's see the results
+You can see now we successfully executed the malicious query
+Now attacker can access into the data base and can manipulate the data base even destroy database.
+so this is a serious issue, In present we use parameter sanitization methods in order to prevent these SQL injection attacks
+more using parametrized queries.
+
+We successfully finished the exploitation.
+
